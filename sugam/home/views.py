@@ -6,6 +6,7 @@ from .GenerateFollowup import GenerateFollowup
 from .VoiceToText import VoiceToText
 from .ImageToText import ImageToText
 from .Summarizer import Summarizer
+from .Comikify import Comikify
 
 openai_key = "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"
 
@@ -16,12 +17,12 @@ def index(request):
 def upload(request):
     if request.method == 'POST':
         # Assuming the image is sent as a file in the 'image' field
-        uploaded_image = request.FILES.get('image')
+        extracted_txt = request.POST['text']
         user_lang      = request.POST["lang"]
 
         # Process the image and extract the text
-        img_to_txt =  ImageToText(uploaded_image)
-        extracted_txt = img_to_txt.start()
+        # img_to_txt =  ImageToText(uploaded_image)
+        # extracted_txt = img_to_txt.start()
 
         try:
             summarize =  Summarizer(extracted_txt, user_lang, openai_key)
@@ -76,5 +77,13 @@ def follow_up(request):
 
 @csrf_exempt
 def comikify(request):
-    # Handle other HTTP methods (e.g., PUT, DELETE) if needed
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    if request.method == 'POST':
+        topic = request.POST.get('topic')
+        comikify = Comikify(topic, openai_key)
+        result = comikify.start()
+
+        # Returning the list as a JSON response
+        return JsonResponse({'result': result, 'total': len(result)})
+
+    # Handling GET requests or other HTTP methods
+    return JsonResponse({'error': 'Invalid request method.'})

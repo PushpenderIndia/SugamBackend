@@ -1,27 +1,36 @@
 import openai
 
 class Comikify:
-    def __init__(self, topic):
+    def __init__(self, topic, openai_key):
         self.topic = topic
-        openai.api_key = "YOUR_OPENAI_API_KEY"  # Replace with your OpenAI API key
+        self.openai_key = openai_key
+        self.prompt = f'write a script dialogue with two characters on topic: "{self.topic}"'
 
-    def generate_dialogue(self):
-        prompt = f'write a script dialogue with two characters on topic: "{self.topic}"'
-
+    def start(self):
+        openai.api_key = self.openai_key
         response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=100,  # Adjust the number of tokens as per your needs
-            temperature=0.6,  # Adjust the temperature as per your preference
+            engine="davinci-codex",
+            prompt=self.prompt,
+            max_tokens=200,
+            temperature=0.7,
             n=1,
-            stop=None
+            stop=None,
         )
 
-        dialogue = response.choices[0].text.strip()
+        dialogue = response.choices[0].text.strip().split('\n')
+
+        if len(dialogue) < 2:
+            return ["Character 1: [Dialogue missing]", "Character 2: [Dialogue missing]"]
+
         return dialogue
 
 if __name__ == "__main__":
-    topic = "Artificial Intelligence"  # Replace with your desired topic
-    script = Comikify(topic)
-    dialogue = script.generate_dialogue()
-    print(dialogue)
+    # Usage example
+    topic = "Artificial Intelligence"
+    openai_key = "your_openai_api_key"
+
+    generator = Comikify(topic, openai_key)
+    dialogue = generator.start()
+
+    for line in dialogue:
+        print(line)
