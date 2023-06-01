@@ -5,6 +5,8 @@ from .VoiceToText import VoiceToText
 from .ImageToText import ImageToText
 from .Summarizer import Summarizer
 
+openai_key = "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"
+
 def upload(request):
     if request.method == 'POST':
         # Assuming the image is sent as a file in the 'image' field
@@ -15,7 +17,7 @@ def upload(request):
         img_to_txt =  ImageToText(uploaded_image)
         extracted_txt = img_to_txt.start()
 
-        summarize =  Summarizer(extracted_txt, user_lang)
+        summarize =  Summarizer(extracted_txt, user_lang, openai_key)
         summarized_txt = summarize.start()
 
         doc_sum = DocSummarized(original_txt=extracted_txt, summarized_txt=summarized_txt)
