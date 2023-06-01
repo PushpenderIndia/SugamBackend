@@ -38,7 +38,7 @@ From that day forward, Lily became known as the village's beloved storyteller. H
 And so, the young girl who once sought adventure in the woods became the catalyst for countless dreams, reminding everyone that within their hearts, the power to create their own extraordinary stories resided.
     """
 
-    openai_key = "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"
+    openai_key = "sk-VnDkOVx2lkXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX8LRMBdS"
 
     test = GenerateFollowup(original_text, openai_key)
     follow_up = test.start("this doc is about which topic?")

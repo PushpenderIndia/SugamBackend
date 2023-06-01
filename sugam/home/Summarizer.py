@@ -1,9 +1,8 @@
 import openai
 
 class Summarizer:
-    def __init__(self, original_txt, lang, openai_key):
+    def __init__(self, original_txt, openai_key):
         self.original_txt = original_txt
-        self.lang = lang
         openai.api_key = openai_key
 
     def start(self):
@@ -19,7 +18,7 @@ class Summarizer:
         return summarized_txt
 
 if __name__ == "__main__":
-    openai_key = "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"
+    openai_key = "sk-Ksl0bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXhxgBNZNHvpOrqhrXygo"
 
     original_text = """
     Once upon a time in a quaint little village nestled amidst rolling hills, there lived a young girl named Lily. She had an insatiable curiosity and an unwavering passion for adventure. Every day, Lily would explore the enchanting forests that surrounded her village, seeking hidden treasures and magical encounters.

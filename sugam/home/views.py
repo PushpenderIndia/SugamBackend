@@ -8,7 +8,7 @@ from .ImageToText import ImageToText
 from .Summarizer import Summarizer
 from .Comikify import Comikify
 
-openai_key = "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"
+openai_key = "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"
 
 def index(request):
     return render(request, "index.html")
@@ -77,8 +77,9 @@ def follow_up(request):
 
 @csrf_exempt
 def comikify(request):
-    if request.method == 'POST':
-        topic = request.POST.get('topic')
+    if request.method == 'GET':
+        topic = request.GET['topic']
+        print("topic:", topic)
         comikify = Comikify(topic, openai_key)
         result = comikify.start()
 
