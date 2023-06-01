@@ -7,6 +7,7 @@ from .VoiceToText import VoiceToText
 from .ImageToText import ImageToText
 from .Summarizer import Summarizer
 from .Comikify import Comikify
+from pprint import pprint 
 
 openai_key = "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"
 
@@ -69,6 +70,7 @@ def follow_up(request):
             'question': extracted_question,
             'followup': follow_up,  
         }
+        pprint(response_data)
 
         return JsonResponse(response_data)
 
@@ -80,6 +82,7 @@ def follow_up(request):
 def comikify(request):
     if request.method == 'GET':
         topic = request.GET.get('topic')
+        print("Topic: ", topic)
         
         try:
             comikify = ComikifyModel.objects.get(topic=topic)
@@ -99,5 +102,7 @@ def comikify(request):
             'result': result,
             'total': total
         }
+
+        pprint(data)
         
         return JsonResponse(data)
