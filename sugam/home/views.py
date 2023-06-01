@@ -16,17 +16,16 @@ def index(request):
 
 @csrf_exempt
 def upload(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         # Assuming the image is sent as a file in the 'image' field
-        extracted_txt = request.POST['text']
-        user_lang      = request.POST["lang"]
+        extracted_txt = request.GET.get('text')
 
         # Process the image and extract the text
         # img_to_txt =  ImageToText(uploaded_image)
         # extracted_txt = img_to_txt.start()
 
         try:
-            summarize =  Summarizer(extracted_txt, user_lang, openai_key)
+            summarize =  Summarizer(extracted_txt, openai_key)
             summarized_txt = summarize.start()
         except Exception as e: 
             summarized_txt = f"Error: {e}"
@@ -49,8 +48,7 @@ def upload(request):
 def follow_up(request):
     if request.method == 'POST':
         doc_id = request.GET.get('id')
-        # Assuming the voice file is sent as a file in the 'voice' field
-        extracted_question = request.POST['text']
+        extracted_question = request.GET.get('text')
 
         doc = DocSummarized.objects.get(id=doc_id)
         original_text = doc.original_txt
