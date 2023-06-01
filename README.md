@@ -1,2 +1,2 @@
-# sugam
+# Sugam
 Sugam Django Backend
