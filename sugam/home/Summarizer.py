@@ -9,18 +9,17 @@ class Summarizer:
     def start(self):
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=self.original_txt,
+            prompt=f"Summarize this paragraph: '{self.original_txt}'",
             max_tokens=100,  # Adjust the number of tokens as per your needs
             temperature=0.5,  # Adjust the temperature as per your preference
             stop=None,
-            n=1,
-            log_level="info"
+            n=1
         )
         summarized_txt = response.choices[0].text.strip()
         return summarized_txt
 
 if __name__ == "__main__":
-    openai_key = "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"
+    openai_key = "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"
 
     original_text = """
     Once upon a time in a quaint little village nestled amidst rolling hills, there lived a young girl named Lily. She had an insatiable curiosity and an unwavering passion for adventure. Every day, Lily would explore the enchanting forests that surrounded her village, seeking hidden treasures and magical encounters.

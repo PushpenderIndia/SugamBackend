@@ -42,13 +42,12 @@ def follow_up(request):
 
         doc = DocSummarized.objects.get(id=doc_id)
         original_text = doc.original_txt
-        summarized_text = doc.summarized_txt
 
         # Process the voice and extract the question text
         voice_to_text =  VoiceToText(uploaded_voice)
         extracted_question = voice_to_text.start()
 
-        gen_follow_up = GenerateFollowup(original_text, summarized_text)
+        gen_follow_up = GenerateFollowup(original_text)
         follow_up = gen_follow_up.start(extracted_question)
 
         # Create the JSON response
@@ -59,5 +58,9 @@ def follow_up(request):
 
         return JsonResponse(response_data)
 
+    # Handle other HTTP methods (e.g., PUT, DELETE) if needed
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+def comikify(request):
     # Handle other HTTP methods (e.g., PUT, DELETE) if needed
     return JsonResponse({'error': 'Invalid request method'}, status=405)
