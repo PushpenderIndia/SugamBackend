@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import DocSummarized
 from .GenerateFollowup import GenerateFollowup
@@ -7,6 +8,9 @@ from .ImageToText import ImageToText
 from .Summarizer import Summarizer
 
 openai_key = "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"
+
+def index(request):
+    return render(request, "index.html")
 
 @csrf_exempt
 def upload(request):
@@ -19,8 +23,11 @@ def upload(request):
         img_to_txt =  ImageToText(uploaded_image)
         extracted_txt = img_to_txt.start()
 
-        summarize =  Summarizer(extracted_txt, user_lang, openai_key)
-        summarized_txt = summarize.start()
+        try:
+            summarize =  Summarizer(extracted_txt, user_lang, openai_key)
+            summarized_txt = summarize.start()
+        except Exception as e: 
+            summarized_txt = f"Error: {e}"
 
         doc_sum = DocSummarized(original_txt=extracted_txt, summarized_txt=summarized_txt)
         doc_sum.save()
@@ -50,8 +57,11 @@ def follow_up(request):
         voice_to_text =  VoiceToText(uploaded_voice)
         extracted_question = voice_to_text.start()
 
-        gen_follow_up = GenerateFollowup(original_text)
-        follow_up = gen_follow_up.start(extracted_question)
+        try:
+            gen_follow_up = GenerateFollowup(original_text)
+            follow_up = gen_follow_up.start(extracted_question)
+        except Exception as e:
+            follow_up = f"Error: {e}"
 
         # Create the JSON response
         response_data = {
