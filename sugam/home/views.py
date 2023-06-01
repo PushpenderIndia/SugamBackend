@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import DocSummarized
 from .GenerateFollowup import GenerateFollowup
 from .VoiceToText import VoiceToText
@@ -7,6 +8,7 @@ from .Summarizer import Summarizer
 
 openai_key = "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"
 
+@csrf_exempt
 def upload(request):
     if request.method == 'POST':
         # Assuming the image is sent as a file in the 'image' field
@@ -34,6 +36,7 @@ def upload(request):
     # Handle other HTTP methods (e.g., GET) if needed
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+@csrf_exempt
 def follow_up(request):
     if request.method == 'POST':
         doc_id = request.GET.get('id')
@@ -61,6 +64,7 @@ def follow_up(request):
     # Handle other HTTP methods (e.g., PUT, DELETE) if needed
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+@csrf_exempt
 def comikify(request):
     # Handle other HTTP methods (e.g., PUT, DELETE) if needed
     return JsonResponse({'error': 'Invalid request method'}, status=405)
