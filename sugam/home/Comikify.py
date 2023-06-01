@@ -23,10 +23,10 @@ class Comikify:
             if raw.strip() != "":
                 final_dialogue.append(raw.strip().split(':')[1].strip())
 
-        if len(dialogue) < 2:
+        if len(final_dialogue) < 2:
             return ["Character 1: [Dialogue missing]", "Character 2: [Dialogue missing]"]
 
-        return dialogue
+        return final_dialogue
 
 if __name__ == "__main__":
     # Usage example
