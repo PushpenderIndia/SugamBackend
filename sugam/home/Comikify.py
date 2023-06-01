@@ -9,15 +9,19 @@ class Comikify:
     def start(self):
         openai.api_key = self.openai_key
         response = openai.Completion.create(
-            engine="davinci",
+            engine="text-davinci-002",
             prompt=self.prompt,
-            max_tokens=500,
-            temperature=0.7,
+            max_tokens=2048,
             n=1,
             stop=None,
+            temperature=0.5,
         )
 
         dialogue = response.choices[0].text.strip().split('\n')
+        final_dialogue = []
+        for raw in dialogue:
+            if raw.strip() != "":
+                final_dialogue.append(raw.strip().split(':')[1].strip())
 
         if len(dialogue) < 2:
             return ["Character 1: [Dialogue missing]", "Character 2: [Dialogue missing]"]

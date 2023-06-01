@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .models import DocSummarized
+from .models import DocSummarized, ComikifyModel
 from .GenerateFollowup import GenerateFollowup
 from .VoiceToText import VoiceToText
 from .ImageToText import ImageToText
@@ -75,16 +75,29 @@ def follow_up(request):
     # Handle other HTTP methods (e.g., PUT, DELETE) if needed
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+
 @csrf_exempt
 def comikify(request):
     if request.method == 'GET':
-        topic = request.GET['topic']
-        print("topic:", topic)
-        comikify = Comikify(topic, openai_key)
-        result = comikify.start()
+        topic = request.GET.get('topic')
+        
+        try:
+            comikify = ComikifyModel.objects.get(topic=topic)
+            result = comikify.result
+            total = len(result)
+        except ComikifyModel.DoesNotExist:
+            # Call Comikify module to generate result list
+            # Assuming `start()` method returns the result list
+            comikify = Comikify(topic, openai_key)
+            result = comikify.start()
+            total = len(result)
+            
+            # Save the result and topic to the database
+            ComikifyModel(topic=topic, result=result).save()
 
-        # Returning the list as a JSON response
-        return JsonResponse({'result': result, 'total': len(result)})
-
-    # Handling GET requests or other HTTP methods
-    return JsonResponse({'error': 'Invalid request method.'})
+        data = {
+            'result': result,
+            'total': total
+        }
+        
+        return JsonResponse(data)
