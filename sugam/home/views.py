@@ -50,14 +50,14 @@ def follow_up(request):
     if request.method == 'POST':
         doc_id = request.GET.get('id')
         # Assuming the voice file is sent as a file in the 'voice' field
-        uploaded_voice = request.FILES.get('voice')
+        extracted_question = request.POST['text']
 
         doc = DocSummarized.objects.get(id=doc_id)
         original_text = doc.original_txt
 
         # Process the voice and extract the question text
-        voice_to_text =  VoiceToText(uploaded_voice)
-        extracted_question = voice_to_text.start()
+        # voice_to_text =  VoiceToText(uploaded_voice)
+        # extracted_question = voice_to_text.start()
 
         try:
             gen_follow_up = GenerateFollowup(original_text)
@@ -67,7 +67,6 @@ def follow_up(request):
 
         # Create the JSON response
         response_data = {
-            'question': extracted_question,
             'followup': follow_up,  
         }
         pprint(response_data)
