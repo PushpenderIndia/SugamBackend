@@ -58,7 +58,7 @@ def follow_up(request):
         # extracted_question = voice_to_text.start()
 
         try:
-            gen_follow_up = GenerateFollowup(original_text)
+            gen_follow_up = GenerateFollowup(original_text, openai_key)
             follow_up = gen_follow_up.start(extracted_question)
         except Exception as e:
             follow_up = f"Error: {e}"
