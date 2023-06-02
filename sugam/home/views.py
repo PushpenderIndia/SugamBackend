@@ -19,20 +19,17 @@ def upload(request):
     if request.method == 'GET':
         # Assuming the image is sent as a file in the 'image' field
         extracted_txt = request.GET.get('text')
+        print("Text: ", extracted_txt)
 
         # Process the image and extract the text
         # img_to_txt =  ImageToText(uploaded_image)
         # extracted_txt = img_to_txt.start()
         
-        summarized_data = DocSummarized.objects.filter(original_txt=extracted_txt).first()
-        if summarized_data:
-            summarized_txt = summarized_data.summarized_txt
-        else:
-            try:
-                summarize =  Summarizer(extracted_txt, openai_key)
-                summarized_txt = summarize.start()
-            except Exception as e: 
-                summarized_txt = f"Error: {e}"
+        try:
+            summarize =  Summarizer(extracted_txt, openai_key)
+            summarized_txt = summarize.start()
+        except Exception as e: 
+            summarized_txt = f"Error: {e}"
 
         doc_sum = DocSummarized(original_txt=extracted_txt, summarized_txt=summarized_txt)
         doc_sum.save()
