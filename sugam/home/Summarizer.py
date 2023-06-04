@@ -1,14 +1,15 @@
 import openai
 
 class Summarizer:
-    def __init__(self, original_txt, openai_key):
+    def __init__(self, original_txt, openai_key, language):
         self.original_txt = original_txt
         openai.api_key = openai_key
+        self.language = language
 
     def start(self):
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Summarize this paragraph: '{self.original_txt}'",
+            prompt=f"Summarize this paragraph & give the output in {self.language} Language: '{self.original_txt}'",
             max_tokens=100,  # Adjust the number of tokens as per your needs
             temperature=0.5,  # Adjust the temperature as per your preference
             stop=None,
@@ -39,6 +40,6 @@ And so, the young girl who once sought adventure in the woods became the catalys
     """
 
     language = "hindi"
-    summarize = Summarizer(original_text, language, openai_key)
+    summarize = Summarizer(original_text, openai_key, language)
     summarized_txt = summarize.start()
     print(summarized_txt)

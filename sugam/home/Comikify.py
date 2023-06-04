@@ -1,10 +1,11 @@
 import openai
 
 class Comikify:
-    def __init__(self, topic, openai_key):
+    def __init__(self, topic, openai_key, language):
         self.topic = topic
         self.openai_key = openai_key
-        self.prompt = f'write a script dialogue on topic: "{self.topic}", script should be generated in such a way so that we can understand the whole topic'
+        self.prompt = f'write a script dialogue in {language} language on topic: "{self.topic}", script should be generated in such a way so that we can understand the whole topic'
+
 
     def start(self):
         openai.api_key = self.openai_key
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     topic = "Artificial Intelligence"
     openai_key = "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"
 
-    generator = Comikify(topic, openai_key)
+    generator = Comikify(topic, openai_key, "Hindi")
     dialogue = generator.start()
     print(dialogue)
 

@@ -19,6 +19,7 @@ def upload(request):
     if request.method == 'GET':
         # Assuming the image is sent as a file in the 'image' field
         extracted_txt = request.GET.get('text')
+        language = request.GET.get('lang')
         print("Text: ", extracted_txt)
 
         # Process the image and extract the text
@@ -26,7 +27,7 @@ def upload(request):
         # extracted_txt = img_to_txt.start()
         
         try:
-            summarize =  Summarizer(extracted_txt, openai_key)
+            summarize =  Summarizer(extracted_txt, openai_key, language)
             summarized_txt = summarize.start()
         except Exception as e: 
             summarized_txt = f"Error: {e}"
@@ -50,6 +51,7 @@ def follow_up(request):
     if request.method == 'POST':
         doc_id = request.GET.get('id')
         extracted_question = request.GET.get('text')
+        language = request.GET.get('lang')
 
         doc = DocSummarized.objects.get(id=doc_id)
         original_text = doc.original_txt
@@ -59,7 +61,7 @@ def follow_up(request):
         # extracted_question = voice_to_text.start()
 
         try:
-            gen_follow_up = GenerateFollowup(original_text, openai_key)
+            gen_follow_up = GenerateFollowup(original_text, openai_key, language)
             follow_up = gen_follow_up.start(extracted_question)
         except Exception as e:
             follow_up = f"Error: {e}"
@@ -80,6 +82,7 @@ def follow_up(request):
 def comikify(request):
     if request.method == 'GET':
         topic = request.GET.get('topic')
+        language = request.GET.get('lang')
         print("Topic: ", topic)
         
         try:
@@ -89,7 +92,7 @@ def comikify(request):
         except ComikifyModel.DoesNotExist:
             # Call Comikify module to generate result list
             # Assuming `start()` method returns the result list
-            comikify = Comikify(topic, openai_key)
+            comikify = Comikify(topic, openai_key, language)
             result = comikify.start()
             total = len(result)
             

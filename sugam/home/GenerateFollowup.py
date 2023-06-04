@@ -1,12 +1,13 @@
 import openai
 
 class GenerateFollowup:
-    def __init__(self, original_text, openai_key):
+    def __init__(self, original_text, openai_key, language):
         self.original_text = original_text
         openai.api_key = openai_key  
+        self.language = language
 
     def start(self, question):
-        prompt = f"Give me answer of this Question: '{question}'\n Use this para for finding the answer: ```{self.original_text}```\n\n"
+        prompt = f"Give me answer of this Question in {self.language} language: '{question}'\n Use this para for finding the answer: ```{self.original_text}```\n\n"
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=prompt,
@@ -40,6 +41,6 @@ And so, the young girl who once sought adventure in the woods became the catalys
 
     openai_key = "sk-VnDkOVx2lkXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX8LRMBdS"
 
-    test = GenerateFollowup(original_text, openai_key)
+    test = GenerateFollowup(original_text, openai_key, "Hindi")
     follow_up = test.start("this doc is about which topic?")
     print(follow_up)
