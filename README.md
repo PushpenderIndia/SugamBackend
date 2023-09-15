@@ -1,5 +1,5 @@
 # Sugam
-Sugam Django Backend
+Django Backend for Sugam Android Application
 
 # Server setup 
 ```
